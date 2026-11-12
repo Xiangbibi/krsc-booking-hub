@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KRSC Booking Hub Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=Noto+Serif+Thai:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#F5F1E8;font-family:'IBM Plex Sans Thai','Leelawadee UI','Thonburi','Tahoma',system-ui,sans-serif;color:#16241D}
+button,input{font:inherit}
+.serif{font-family:'Noto Serif Thai','Leelawadee UI',Georgia,serif}
+.muted{color:#5E6B63}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:#9A7A2E}
+.card{background:#FFF;border:1px solid #E8E1D1;border-radius:18px;box-shadow:0 1px 2px rgba(20,50,42,.04),0 8px 24px rgba(20,50,42,.06)}
+.topnav{position:sticky;top:0;z-index:5;background:#0F1A16;display:flex;gap:6px;padding:8px 16px;flex-wrap:wrap;align-items:center}
+.topnav .lbl{color:#B9C4B9;font-size:12px;margin-right:8px}
+.tn{padding:8px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.2);background:transparent;color:#E9E4D6;cursor:pointer;font-size:14px;min-height:40px}
+.tn-on{padding:8px 14px;border-radius:10px;border:1px solid #D9B860;background:#D9B860;color:#14322A;cursor:pointer;font-size:14px;font-weight:700;min-height:40px}
+.btn{font-size:15px;padding:13px 22px;min-height:48px;border-radius:12px;border:none;background:#1E4D3A;color:#FFF;font-weight:600;cursor:pointer;box-shadow:0 6px 16px rgba(30,77,58,.25)}
+.btn:hover{background:#14322A}
+.btn-sec{font-size:14px;padding:11px 16px;min-height:46px;border-radius:12px;border:1px solid #C9C1AF;background:#FFF;color:#3B4A42;font-weight:600;cursor:pointer}
+.btn-link{font-size:13px;font-weight:600;color:#1E4D3A;background:none;border:1px solid #C9D9CF;border-radius:10px;padding:8px 12px;min-height:40px;cursor:pointer}
+.btn-link:hover{background:#EEF4F0}
+.chip{font-size:14px;padding:9px 14px;min-height:42px;border-radius:12px;border:1px solid #DDD5C3;background:#FFF;color:#16241D;cursor:pointer}
+.chip:hover{border-color:#1E4D3A}
+.chip-on{font-size:14px;padding:9px 14px;min-height:42px;border-radius:12px;border:1.5px solid #1E4D3A;background:#1E4D3A;color:#FFF;cursor:pointer;font-weight:600}
+.lbl2{font-size:13px;font-weight:600;color:#3B4A42}
+.inp{font-size:15px;padding:11px 14px;min-height:46px;border-radius:12px;border:1px solid #DDD5C3;background:#FCFBF7;color:#16241D;width:100%}
+.inp-err{font-size:15px;padding:11px 14px;min-height:46px;border-radius:12px;border:1.5px solid #B42318;background:#FFF8F7;width:100%}
+.field{display:flex;flex-direction:column;gap:6px}
+.grid{display:grid;gap:16px}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;white-space:nowrap}
+.t-scout{background:#DDEBE2;color:#1E4D3A}.t-youth{background:#D9EEF0;color:#155E63}.t-corp{background:#F3E6CC;color:#6B4A0F}.t-family{background:#E9E1F2;color:#4A3373}
+.p-ok{background:#E4F0E8;color:#1E4D3A}.p-wait{background:#FBF0D5;color:#7A5A12}.p-warn{background:#FDE7E4;color:#912018}.p-none{background:#F3F0E8;color:#4B4F4A}
+.bar-scout,.bar-youth,.bar-corp,.bar-family{display:block;width:100%;height:6px;border-radius:4px}
+.bar-scout{background:#2F6B4F}.bar-youth{background:#2A8C93}.bar-corp{background:#C49A3C}.bar-family{background:#8A6BBE}
+.dot{font-size:11px;font-weight:600;padding:3px 7px;border-radius:7px;white-space:nowrap}
+.d-done{background:#1E4D3A;color:#FFF}.d-now{background:#FFF;color:#7A5A12;border:1.5px solid #B8913A}.d-todo{background:#F3F0E8;color:#8A877E}
+/* customer */
+.step{display:flex;align-items:center;gap:8px;font-size:13px;color:#8A877E}
+.step.on{color:#14322A;font-weight:700}.step.done{color:#1E4D3A}
+.sn{width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;border:1.5px solid currentColor}
+.type{text-align:left;padding:20px;border-radius:16px;border:1.5px solid #E8E1D1;background:#FFF;cursor:pointer;display:flex;flex-direction:column;gap:6px;min-height:150px;color:#16241D}
+.type:hover{border-color:#1E4D3A}
+.type.on{border:2px solid #1E4D3A;background:#F2F7F3}
+.house{text-align:left;padding:14px;border-radius:14px;border:1px solid #E1DACB;background:#FFF;cursor:pointer;display:flex;flex-direction:column;gap:4px;min-height:96px;color:#16241D}
+.house:hover{border-color:#1E4D3A}
+.house.on{border:2px solid #1E4D3A;background:#F2F7F3}
+.house.off{border:1px dashed #D6D0C2;background:#F3F0E8;color:#8A877E;cursor:not-allowed}
+.bar{height:8px;border-radius:99px;background:#EEE8DB;overflow:hidden}
+.fill{height:8px;border-radius:99px}
+.chat{display:flex;flex-direction:column;gap:10px}
+.r{display:flex}.r.admin,.r.bot{justify-content:flex-start}.r.me,.r.user{justify-content:flex-end}.r.sys{justify-content:center}
+.m{max-width:80%;border-radius:16px;padding:11px 14px;font-size:14px;line-height:1.6;white-space:pre-line}
+.m.admin,.m.bot{background:#FFF;border:1px solid #E8E1D1;border-radius:4px 16px 16px 16px}
+.m.me,.m.user{background:#06C755;color:#FFF;border-radius:16px 4px 16px 16px}
+.m.sys{background:#F6EDD6;color:#7A5A12;border-radius:999px;padding:5px 12px;font-size:12px;font-weight:600}
+.tag{font-size:11px;color:#9A7A2E;font-weight:600;margin-top:5px}
+.m.user .tag{color:#E8FFE8}
+/* admin */
+.app{display:grid;grid-template-columns:236px minmax(0,1fr);min-height:calc(100vh - 56px)}
+.side{background:#14322A;color:#E9E4D6;padding:24px 16px;display:flex;flex-direction:column;gap:24px}
+.nav{text-align:left;padding:12px 14px;min-height:46px;border-radius:12px;border:none;background:transparent;color:#C9D3C9;cursor:pointer;font-size:15px}
+.nav:hover{background:rgba(255,255,255,.06);color:#FFF}
+.nav.on{background:#F5F1E8;color:#14322A;font-weight:600}
+.content{padding:24px 30px 40px;display:flex;flex-direction:column;gap:20px;min-width:0}
+.kpi{padding:18px 20px;display:flex;flex-direction:column;gap:4px}
+.kpi-n{font-family:'Noto Serif Thai',Georgia,serif;font-size:34px;font-weight:700;line-height:1.1}
+.cal{text-align:left;min-height:92px;padding:8px;border-radius:12px;border:1px solid #EEE8DB;background:#FFF;cursor:pointer;display:flex;flex-direction:column;gap:4px;color:#16241D}
+.cal:hover{border-color:#1E4D3A}
+.cal.sel{border:2px solid #1E4D3A;background:#F2F7F3}
+.cal.x{border:2px solid #B42318;background:#FFF6F5}
+.th{padding:12px 14px;font-size:12px;color:#5E6B63;font-weight:600;text-align:left;white-space:nowrap}
+.td{padding:13px 14px;vertical-align:top}
+table{width:100%;border-collapse:collapse;font-size:14px}
+tr+tr{border-top:1px solid #F1ECE1}
+.cust{text-align:left;padding:12px 14px;min-height:56px;border-radius:12px;border:1px solid transparent;background:transparent;cursor:pointer;display:flex;flex-direction:column;gap:2px;width:100%;color:#16241D}
+.cust:hover{background:#F7F4EC}
+.cust.on{border:1.5px solid #1E4D3A;background:#F2F7F3}
+.kv{display:grid;grid-template-columns:120px minmax(0,1fr);gap:6px 12px;font-size:14px;line-height:1.55}
+.alert-r{background:#FFF6F5;border:1px solid #F6C9C3;border-radius:12px;padding:12px;font-size:14px;line-height:1.55}
+.alert-y{background:#FBF6E9;border:1px solid #EAD9AE;border-radius:12px;padding:12px;font-size:14px;line-height:1.55}
+.fl{flex:1 1 170px;border-radius:14px;padding:12px 14px;background:#FFF;border:1px solid #E8E1D1;color:#5E6B63}.fl.on{background:#14322A;border-color:#14322A;color:#FFF}.fl.done{background:#E4F0E8;border-color:#B9D8C5;color:#1E4D3A}
+.qr{font-size:13px;padding:8px 13px;min-height:40px;border-radius:999px;border:1px solid #1E4D3A;background:#FFF;color:#1E4D3A;cursor:pointer;font-weight:600}
+.team{font:inherit;flex:1 1 0;min-width:70px;padding:10px 6px;min-height:58px;border-radius:12px;border:1px solid #DDD5C3;background:#FFFFFF;color:#16241D;cursor:pointer;font-size:14px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.team.on{font:inherit;flex:1 1 0;min-width:70px;padding:10px 6px;min-height:58px;border-radius:12px;border:1.5px solid #D9B860;background:#14322A;color:#FFFFFF;cursor:pointer;font-size:14px;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:2px}
+.task{border-radius:14px;border:1px solid #E8E1D1;background:#FFFFFF;padding:14px;display:flex;flex-direction:column;gap:6px}
+.task.done{border-radius:14px;border:1px solid #B9D8C5;background:#F2F7F3;padding:14px;display:flex;flex-direction:column;gap:6px}
+.ok{font:inherit;font-size:14px;padding:10px 14px;min-height:44px;border-radius:10px;border:none;background:#1E4D3A;color:#FFFFFF;font-weight:600;cursor:pointer;align-self:flex-start}
+.ok.done{font:inherit;font-size:14px;padding:10px 14px;min-height:44px;border-radius:10px;border:1px solid #B9D8C5;background:#FFFFFF;color:#1E4D3A;font-weight:600;cursor:pointer;align-self:flex-start}
+.warn{font-size:13px;font-weight:600;color:#912018;background:#FFF6F5;border-radius:8px;padding:6px 10px}
+
+.upd{font-size:12px;font-weight:700;color:#7A5A12;background:#FBF0D5;border-radius:999px;padding:3px 10px;align-self:flex-start}
+
+.line{font-size:14px;line-height:1.55}
+@media (max-width:760px){.app{grid-template-columns:1fr}.side{min-height:auto}.content{padding:16px}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+'use strict';
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const baht = (n) => Math.round(n).toLocaleString('en-US') + ' บาท';
+const WD = ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'];
+const TODAY = 19;
+const dName = (d) => WD[(d - 1) % 7] + ' ' + d + ' พ.ย.';
+
+// ---------- shared data ----------
+const UNITS = [
+  ['dp12', 'ดอกปีบ บน 1–2', 'อาคารพักกลุ่ม', 60, null, 'ใบสั่งงาน (ความจุสมมติ)', 1],
+  ['dp14', 'ดอกปีบ ล่าง 1–4', 'อาคารพักกลุ่ม', 120, null, 'ใบสั่งงาน (ความจุสมมติ)', 1],
+  ['dp5', 'ดอกปีบ ล่าง 5', 'อาคารพักกลุ่ม', 30, null, 'ใบสั่งงาน (ความจุสมมติ)', 1],
+  ['yt1', 'ยูงทอง 101–103', 'อาคารพักกลุ่ม (F บ้านสาบยูงทอง)', 75, null, 'เว็บไซต์ไม่ระบุความจุ · ค่าสมมติ', 1],
+  ['yt2', 'ยูงทอง 201–202', 'อาคารพักกลุ่ม (F บ้านสาบยูงทอง)', 50, null, 'เว็บไซต์ไม่ระบุความจุ · ค่าสมมติ', 1],
+  ['sh', 'Shelter 1–3', 'อาคารพักกลุ่ม', 120, null, 'ใบสั่งงาน (ความจุสมมติ)', 1],
+  ['peach', 'บ้านพีช', 'อาคารพักกลุ่ม', 8, null, 'ใบสั่งงาน (ความจุสมมติ)', 1],
+  ['A1', 'A1 บ้านบาหลี', 'บ้านพัก', 2, 800, 'kaengkrachan.net', 0],
+  ['A2', 'A2 บ้านลดาวัลย์', 'บ้านพัก', 2, 800, 'kaengkrachan.net', 0],
+  ['A3', 'A3 บ้านเฟื่องฟ้า', 'บ้านพัก', 2, 800, 'kaengkrachan.net', 0],
+  ['A4', 'A4 บ้านกระดุมทอง 1', 'บ้านพัก', 4, 1600, 'kaengkrachan.net', 0],
+  ['A5', 'A5 บ้านกระดุมทอง 2', 'บ้านพัก', 4, 1600, 'kaengkrachan.net', 0],
+  ['B1', 'B1 บ้านลีลาวดี', 'บ้านพัก', 4, null, 'kaengkrachan.net (ไม่แสดงราคา)', 0],
+  ['B2', 'B2 บ้านมะลิ 1', 'บ้านพัก', 4, 1600, 'kaengkrachan.net', 0],
+  ['B3', 'B3 บ้านมะลิ 2', 'บ้านพัก', 4, 1600, 'kaengkrachan.net', 0],
+  ['C1', 'C1 บ้านในฝัน', 'บ้านพัก', 6, null, 'kaengkrachan.net (ไม่แสดงราคา)', 0],
+  ['C2', 'C2 บ้านศรีตรัง', 'บ้านพัก', 6, 2400, 'kaengkrachan.net', 0],
+  ['D1a', 'D1 บ้านเบิร์ด 1', 'บ้านพัก', 5, 2000, 'kaengkrachan.net', 0],
+  ['D1b', 'D1 บ้านเบิร์ด 2', 'บ้านพัก', 5, 2000, 'kaengkrachan.net', 0],
+].map(([id, name, kind, cap, price, src, group]) => ({ id, name, kind, cap, price, src, group: !!group }));
+const U = (id) => UNITS.find(u => u.id === id).name;
+const TYPE = { scout: ['ค่ายลูกเสือ', 'pill t-scout', 'bar-scout'], youth: ['ค่ายเยาวชน', 'pill t-youth', 'bar-youth'], corp: ['องค์กร', 'pill t-corp', 'bar-corp'], family: ['ครอบครัว', 'pill t-family', 'bar-family'] };
+const BK = [
+  { id: 'KR-2611-011', name: 'โรงเรียน B', type: 'scout', from: 19, to: 21, p1: 280, p2: 18, p1l: 'นักเรียน', p2l: 'ครู', channel: 'LINE OA', contact: 'ครูประเสริฐ ผู้ประสานงาน', phone: '08X-XXX-1101', line: 'school.b', arrive: '10:00', pay: 'จ่ายแล้ว 50%', payCls: 'pill p-ok', steps: [2, 2, 2, 0], recNote: 'ยืนยันที่ D-3 · 320 → 298 คน', ver: 3, ok: 4,
+    houses: [['dp12', 60], ['dp14', 120], ['dp5', 25], ['yt1', 75], ['A1', 2], ['A2', 2], ['A3', 2], ['B1', 4], ['B2', 4], ['B3', 4]],
+    acts: [[19, '10:00', 'ลงทะเบียน ปฐมนิเทศ'], [19, '13:00', 'Adventure Park'], [19, '19:00', 'กองไฟ'], [20, '09:00', 'ล่องแก่ง'], [20, '14:00', 'ยิงธนู'], [20, '16:00', 'ส่องนก (Bird Watching)'], [21, '09:00', 'พิธีปิดค่าย'], [21, '11:00', 'เช็กเอาต์']],
+    allergy: 'แพ้กุ้ง 3 คน · มังสวิรัติ 12 คน', note: 'ครูขอโต๊ะประชุมคืนแรก 20:30', hist: [['ธ.ค. 2568', '305 คน · ดอกปีบ, ยูงทอง · ค่ายลูกเสือ 3 วัน 2 คืน', 'ขอล่องแก่งปีหน้า · ครูชอบข้าวต้มเช้า'], ['ม.ค. 2567', '280 คน · ดอกปีบ, Shelter', 'มาถึงเร็วกว่านัด 1 ชม. ให้เตรียมจุดรอรับ']] },
+  { id: 'KR-2611-016', name: 'ครอบครัว F', type: 'family', from: 19, to: 20, p1: 2, p2: 0, p1l: 'ผู้ใหญ่', p2l: 'เด็ก', channel: 'Facebook', contact: 'คุณนภา', phone: '08X-XXX-1606', line: '-', arrive: '15:00', pay: 'จ่ายแล้ว 100%', payCls: 'pill p-ok', steps: [0, 0, 0, 0], recNote: 'กลุ่มเล็ก ไม่ต้องยืนยันยอด', ver: 1, ok: 4,
+    houses: [['A4', 2]], acts: [[19, '16:00', 'กาแฟ Camper ริมน้ำ'], [20, '08:00', 'ล่องแก่ง']], allergy: '', note: 'ฉลองครบรอบแต่งงาน ขอจัดโต๊ะริมน้ำ', hist: [['เม.ย. 2569', '2 คน · A1 บ้านบาหลี', 'ชอบบ้านริมน้ำ เงียบ']] },
+  { id: 'KR-2611-013', name: 'ครอบครัว D', type: 'family', from: 20, to: 22, p1: 2, p2: 2, p1l: 'ผู้ใหญ่', p2l: 'เด็ก', channel: 'Facebook', contact: 'คุณวิภา', phone: '08X-XXX-1303', line: 'wipa.d', arrive: '14:00', pay: 'จ่ายแล้ว 100%', payCls: 'pill p-ok', steps: [0, 0, 0, 0], recNote: 'กลุ่มเล็ก ไม่ต้องยืนยันยอด', ver: 1, ok: 2,
+    houses: [['A5', 4]], acts: [[20, '15:00', 'ล่องแก่ง'], [21, '09:00', 'ให้อาหารสัตว์'], [21, '14:00', 'Workshop สบู่ออแกนิค']], allergy: 'เด็กแพ้ถั่ว 1 คน', note: 'ขอเตียงเสริมเด็ก 1 เตียง', hist: [] },
+  { id: 'KR-2611-012', name: 'บริษัท C', type: 'corp', from: 21, to: 23, p1: 22, p2: 0, p1l: 'ผู้เข้าร่วม', p2l: 'ผู้ดูแล', channel: 'โทรศัพท์', contact: 'คุณธนา ฝ่ายบุคคล', phone: '08X-XXX-1202', line: 'hr.c', arrive: '11:00', pay: 'จ่ายแล้ว 50%', payCls: 'pill p-ok', steps: [2, 2, 1, 0], recNote: 'ยังไม่ตอบ · ปิดยอดวันนี้ (D-2)', ver: 2, ok: 3,
+    houses: [['C1', 6], ['C2', 6], ['D1a', 5], ['D1b', 5]], acts: [[21, '13:00', 'ทีมบิลดิ้ง'], [21, '18:00', 'พิซซ่าโฮมเมด'], [22, '09:00', 'ล่องแก่ง'], [22, '14:00', 'ยิงธนู'], [23, '10:00', 'เช็กเอาต์']],
+    allergy: 'มังสวิรัติ 2 คน', note: 'ขอใบกำกับภาษีในชื่อบริษัทแม่', hist: [['มี.ค. 2569', '20 คน · C1, C2 · ทีมบิลดิ้ง 2 วัน', 'ขอใบกำกับภาษีชื่อบริษัทแม่']] },
+  { id: 'KR-2611-015', name: 'ค่ายเยาวชน E', type: 'youth', from: 23, to: 26, p1: 140, p2: 10, p1l: 'เด็ก', p2l: 'พี่เลี้ยง', channel: 'เว็บไซต์', contact: 'คุณกานต์', phone: '08X-XXX-1505', line: 'camp.e', arrive: '09:30', pay: 'รอมัดจำ (ครบพรุ่งนี้)', payCls: 'pill p-wait', steps: [2, 1, 0, 0], recNote: 'ส่ง D-5 แล้ว รอคำตอบ', ver: 1, ok: 0,
+    houses: [['sh', 110], ['yt2', 40]], acts: [[23, '13:00', 'Adventure Park'], [24, '09:00', 'Workshop สบู่ออแกนิค'], [24, '14:00', 'เก็บไข่ไก่ + ให้อาหารสัตว์'], [25, '09:00', 'Solar to learn'], [25, '14:00', 'ยิงธนู'], [25, '19:00', 'กองไฟ'], [26, '10:00', 'เช็กเอาต์']],
+    allergy: 'แพ้นมวัว 2 คน', note: 'ธีมค่าย: วิทยาศาสตร์ธรรมชาติ', hist: [] },
+  { id: 'KR-2611-018', name: 'โรงเรียน G', type: 'scout', from: 27, to: 28, p1: 36, p2: 4, p1l: 'นักเรียน', p2l: 'ครู', channel: 'LINE OA', contact: 'ครูมานพ', phone: '08X-XXX-1808', line: 'school.g', arrive: '09:00', pay: 'จ่ายแล้ว 50%', payCls: 'pill p-ok', steps: [0, 0, 0, 0], recNote: 'จะส่ง D-7 วันที่ 20 พ.ย.', ver: 1, ok: 0,
+    houses: [['dp5', 30], ['peach', 8], ['A1', 2]], acts: [[27, '10:00', 'Adventure Park'], [27, '19:00', 'กองไฟ'], [28, '09:00', 'ล่องแก่ง']], allergy: '', note: 'ค่ายลูกเสือ 2 วัน 1 คืน', hist: [['พ.ย. 2568', '45 คน · ดอกปีบ ล่าง 5 · ค่าย 2 วัน 1 คืน', 'ขอเมนูเด็กไม่เผ็ด']] },
+];
+const pax = (b) => b.p1 + b.p2;
+const here = (b, d) => b.from <= d && d <= b.to;
+const night = (b, d) => b.from <= d && d < b.to;
+const unitTaken = (id, nights) => BK.some(b => b.houses.some(([u]) => u === id) && nights.some(n => night(b, n)));
+const conflictOn = (d) => {
+  const seen = {}, out = [];
+  BK.filter(b => night(b, d)).forEach(b => b.houses.forEach(([u]) => { if (seen[u] && seen[u] !== b.name) out.push(U(u) + ': ' + seen[u] + ' และ ' + b.name); else seen[u] = b.name; }));
+  return out;
+};
+
+// ---------- state ----------
+const CTYPES = [
+  { id: 'scout', name: 'ค่ายลูกเสือ / เนตรนารี', desc: 'โรงเรียน 50–400 คน · โปรแกรมมาตรฐาน 3 วัน 2 คืน มีกองไฟและ Adventure Park', price: 'ประมาณ 500 บาท/คน (ตัวอย่าง)', group: true, org: 'ชื่อโรงเรียน *', p1: 'จำนวนนักเรียน *', p2: 'จำนวนครู *' },
+  { id: 'youth', name: 'ค่ายเยาวชน / Summer camp', desc: 'กลุ่มเด็กและเยาวชน เลือกกิจกรรมเรียนรู้ตามธีม', price: 'ประมาณ 500 บาท/คน (ตัวอย่าง)', group: true, org: 'ชื่อค่าย / หน่วยงาน *', p1: 'จำนวนเด็ก *', p2: 'จำนวนพี่เลี้ยง *' },
+  { id: 'corp', name: 'องค์กร / ทีมบิลดิ้ง', desc: 'บริษัทและหน่วยงาน Workshop และกิจกรรมกลุ่ม', price: 'ประมาณ 500 บาท/คน (ตัวอย่าง)', group: true, org: 'ชื่อบริษัท *', p1: 'จำนวนผู้เข้าร่วม *', p2: 'จำนวนผู้ดูแล' },
+  { id: 'family', name: 'ครอบครัว / ที่พักทั่วไป', desc: '2–10 คน · บ้านพักริมน้ำ ราคาตามบ้านที่เลือก', price: 'เริ่ม 800 บาท/คืน', group: false, org: 'ชื่อครอบครัว / กลุ่ม', p1: 'ผู้ใหญ่ *', p2: 'เด็ก' },
+];
+const DATES = [{ id: 'a', label: '20–22 พ.ย. 2569', nights: [20, 21] }, { id: 'b', label: '27–29 พ.ย. 2569', nights: [27, 28] }];
+const ACTS = ['กองไฟ (โปรแกรมค่าย)', 'ล่องแก่ง', 'Adventure Park', 'ยิงธนู (10 ปีขึ้นไป)', 'เก็บไข่ไก่อารมณ์ดี (1–20 คน/กลุ่ม)', 'เก็บผลไม้สดจากสวน', 'ให้อาหารสัตว์', 'ส่องนก', 'Workshop บ้านดิน (10 คนขึ้นไป)', 'สบู่ออแกนิค (10 ปีขึ้นไป)', 'Plant & Paint (10 ปีขึ้นไป)', 'มัดย้อมผ้าด้วยกากกาแฟ', 'ขนมไทยโฮมเมด', 'พิซซ่าโฮมเมด', 'Explorer Photoshoot', 'Solar to learn', 'ระบายสี', 'กาแฟ Camper'];
+const CHANS = ['LINE OA', 'โทรศัพท์', 'Facebook', 'เว็บไซต์'];
+const freshC = () => ({ step: 1, type: 'scout', date: 'b', sel: [], acts: ['กองไฟ (โปรแกรมค่าย)', 'ล่องแก่ง', 'Adventure Park'], chan: 'LINE OA', err2: false, err3: false, q: 0,
+  f: { org: 'โรงเรียน A', name: 'ครูสมศรี ใจดี', phone: '081-234-5678', line: 'somsri.a', p1: '280', p2: '20', arrive: '10:00', allergy: 'แพ้กุ้ง 3 คน, มังสวิรัติ 12 คน' } });
+const GREET = { who: 'bot', text: 'สวัสดีค่ะ Kaeng Krachan Riverside ยินดีให้บริการ\nถามเรื่องราคา บ้านว่าง หรือการเดินทางได้ตลอด 24 ชม. ถ้าเป็นเรื่องที่ต้องคุยกับเจ้าหน้าที่ ระบบจะส่งต่อให้ค่ะ', tag: 'ผู้ช่วย AI' };
+const freshB = () => ({ stage: 0, msgs: [GREET], step: 'start', pending: false, handoff: false, disc: false, nAi: 1, nHuman: 0 });
+const S = { s: { team: 'kitchen', day: 19, done: {} }, view: 'cust', c: freshC(), a: { tab: 'today', day: TODAY, cust: 'KR-2611-011', q: '' }, b: freshB() };
+
+// ---------- actions ----------
+const A = {};
+const act = (name, arg) => `data-act="${name}"` + (arg !== undefined ? ` data-arg="${esc(arg)}"` : '');
+A.view = (v) => { S.view = v; window.scrollTo(0, 0); };
+// customer
+A.cType = (id) => { const c = S.c; const fam = id === 'family'; const wasFam = c.type === 'family'; c.type = id; c.step = 2; c.sel = [];
+  if (fam) { c.f = { ...c.f, org: 'ครอบครัวสุขใจ', name: 'คุณวิภา สุขใจ', p1: '2', p2: '2', allergy: '' }; c.acts = ['ล่องแก่ง', 'พิซซ่าโฮมเมด']; }
+  else if (wasFam) { c.f = freshC().f; c.acts = freshC().acts; } };
+A.cDate = (id) => { S.c.date = id; S.c.sel = []; };
+A.cAct = (n) => { const a = S.c.acts; S.c.acts = a.includes(n) ? a.filter(x => x !== n) : a.concat([n]); };
+A.cChan = (n) => { S.c.chan = n; };
+A.cUnit = (id) => { const s = S.c.sel; S.c.sel = s.includes(id) ? s.filter(x => x !== id) : s.concat([id]); S.c.err3 = false; };
+A.cBack = () => { S.c.step = Math.max(1, S.c.step - 1); S.c.err2 = S.c.err3 = false; };
+A.cNext2 = () => { const f = S.c.f; if (!f.name.trim() || !f.phone.trim()) { S.c.err2 = true; return; } S.c.err2 = false; S.c.step = 3; };
+A.cNext3 = () => { if (!custCalc().enough) { S.c.err3 = true; return; } S.c.step = 4; };
+A.cSend = () => { S.c.step = 5; };
+A.cQ = (n) => { S.c.q = +n; };
+A.cRestart = () => { S.c = freshC(); };
+// admin
+A.aTab = (t) => { S.a.tab = t; };
+A.aDay = (d) => { S.a.day = +d; };
+A.aCust = (id) => { S.a.tab = 'cust'; S.a.cust = id; };
+// bot
+const add = (list, extra) => { S.b.msgs = S.b.msgs.concat(list); Object.assign(S.b, extra || {}); };
+A.bReset = () => { S.b = freshB(); };
+A.bQ = (k) => {
+  const b = S.b;
+  const Q = {
+    price: () => add([{ who: 'user', text: 'สอบถามราคาค่ายลูกเสือค่ะ' }, { who: 'bot', text: 'ยินดีค่ะ ขอข้อมูลเพื่อประเมินราคา\n1. จำนวนนักเรียนและครู\n2. จำนวนวัน\n3. วันที่ต้องการ', tag: 'AI ถามข้อมูลที่จำเป็น' }], { step: 'askPrice', stage: 1, nAi: b.nAi + 1 }),
+    avail: () => add([{ who: 'user', text: 'วันที่ 27–29 พ.ย. ยังมีบ้านว่างไหมคะ' }, { who: 'bot', text: 'คืนวันที่ 27–29 พ.ย. อาคารพักกลุ่มที่ยังว่าง: ดอกปีบ บน 1–2, ดอกปีบ ล่าง 1–4, ยูงทอง 101–103, ยูงทอง 201–202 และ Shelter 1–3 พอสำหรับ 300 คน\nบ้านพักครูที่ว่าง: A2 บ้านลดาวัลย์, A3 บ้านเฟื่องฟ้า, B2–B3 บ้านมะลิ 1–2\nตอนนี้ยังไม่ได้กันที่พักให้นะคะ ถ้าต้องการจอง กรอกฟอร์มจองได้ที่ลิงก์ด้านล่าง', tag: 'ข้อมูลสดจาก Booking Hub' }, { who: 'bot', text: '[ลิงก์ฟอร์มจองค่าย]' }], { nAi: b.nAi + 1 }),
+    faq: () => add([{ who: 'user', text: 'เดินทางยังไง แล้วนักเรียนต้องเตรียมอะไรมาบ้างคะ' }, { who: 'bot', text: 'รีสอร์ตอยู่อำเภอแก่งกระจาน จังหวัดเพชรบุรี ส่งแผนที่ Google Maps ให้ด้านล่างค่ะ\nของที่ควรเตรียม: ไฟฉาย ยากันยุง รองเท้าผ้าใบ ชุดที่เปียกได้สำหรับล่องแก่ง และยาประจำตัว', tag: 'ตอบจากคลัง FAQ ของรีสอร์ต' }], { nAi: b.nAi + 1 }),
+    disc: () => add([{ who: 'user', text: 'ถ้ามา 300 คน ขอส่วนลดพิเศษได้ไหมคะ' }, { who: 'bot', text: 'เรื่องส่วนลดต้องให้เจ้าหน้าที่พิจารณาค่ะ ส่งเรื่องให้แอดมินแล้ว จะติดต่อกลับในเวลาทำการนะคะ', tag: 'ส่งต่อให้คน' }], { handoff: true, nHuman: b.nHuman + 1 }),
+    rem: () => add([{ who: 'sys', text: 'วันศุกร์ 20 พ.ย. · ระบบส่งเตือน D-7 อัตโนมัติ' }, { who: 'bot', text: 'เรียนคุณครูโรงเรียน A ค่ายวันที่ 27–29 พ.ย. ตอนนี้จองไว้ 300 คน\nรบกวนยืนยันยอดคนหน่อยนะคะ ครัวจะใช้ยอดนี้ซื้อของ', tag: 'D-7 (มีใน Standard ด้วย)' }], { step: 'reminder', stage: 5 }),
+    give: () => add([{ who: 'user', text: 'นักเรียน 280 ครู 20 คน 3 วัน 2 คืน วันที่ 27–29 พ.ย. ค่ะ' }, { who: 'bot', text: 'ราคาประมาณ 300 คน × 500 บาท = 150,000 บาท\n(ยังไม่รวมส่วนต่างถ้าครูเลือกพักบ้านพัก)\nกรอกฟอร์มจองเพื่อเลือกที่พักและรับใบเสนอราคาจริงได้ที่ลิงก์นี้ค่ะ', tag: 'ราคาประมาณ · AI ตอบเอง' }, { who: 'bot', text: '[ลิงก์ฟอร์มจองค่าย → หน้าจองของลูกค้า]' }], { step: 'form', stage: 2, nAi: b.nAi + 1 }),
+    form: () => add([{ who: 'sys', text: 'ครูส่งฟอร์มจองแล้ว · KR-2611-021 · มาจากหน้าจองของลูกค้า' }, { who: 'bot', text: 'ได้รับฟอร์มแล้วค่ะ ระบบร่างใบเสนอราคาจากข้อมูลในฟอร์มแล้ว แอดมินจะตรวจและส่งให้ในแชตนี้ภายใน 1 ชั่วโมงในเวลาทำการ', tag: 'ราคายังไม่ส่ง รอ admin' }], { step: 'wait', stage: 3, pending: true, nAi: b.nAi + 1, nHuman: b.nHuman + 1 }),
+    pay: () => add([{ who: 'user', text: 'โอนมัดจำแล้วค่ะ [รูปสลิป]' }, { who: 'bot', text: 'ได้รับสลิปแล้วค่ะ ส่งให้แอดมินตรวจยอด', tag: 'AI รับสลิป ส่งต่อ admin' }, { who: 'bot', text: 'ตรวจยอดแล้ว การจองยืนยันเรียบร้อยค่ะ\nระบบจะส่งข้อความยืนยันยอดคน 7 วันก่อนเข้าพักนะคะ', tag: 'admin ยืนยันเอง' }], { step: 'start', stage: 4, nAi: b.nAi + 1 }),
+    same: () => add([{ who: 'user', text: 'ยอดเท่าเดิม 300 คนค่ะ' }, { who: 'bot', text: 'บันทึกแล้วค่ะ ยืนยัน 300 คน ขอบคุณค่ะ', tag: 'AI บันทึกยอดลง Booking Hub' }], { step: 'start', nAi: b.nAi + 1 }),
+    change: () => add([{ who: 'user', text: 'นักเรียนลาไป 15 คน เหลือ 285 คนค่ะ' }, { who: 'bot', text: 'บันทึกแล้วค่ะ ยอดใหม่ 285 คน\nใบสั่งงานอัปเดตเป็นฉบับใหม่ และแจ้งครัว แม่บ้าน วิทยากรแล้ว', tag: 'AI เข้าใจข้อความ แล้วอัปเดต Booking Hub' }], { step: 'start', nAi: b.nAi + 1 }),
+  };
+  Q[k]();
+};
+A.bDisc = () => { S.b.disc = !S.b.disc; };
+A.bApprove = () => { const per = S.b.disc ? 480 : 500, t = 300 * per + 16000;
+  add([{ who: 'bot', text: 'ใบเสนอราคา KR-2611-021 โรงเรียน A\nแพ็กเกจค่ายลูกเสือ 300 คน × ' + per + ' บาท = ' + baht(300 * per) + '\nส่วนต่างบ้านพักครู = 16,000 บาท\nรวม ' + baht(t) + ' · มัดจำ 50% ' + baht(t / 2) + '\nส่งสลิปมัดจำในแชตนี้ได้เลยค่ะ ส่วนที่เหลือชำระวันเช็กเอาต์', tag: 'AI ร่าง · admin อนุมัติแล้ว' }], { pending: false, step: 'pay', stage: 4, nHuman: Math.max(0, S.b.nHuman - 1) }); };
+A.bTake = () => add([{ who: 'bot', text: 'สวัสดีค่ะ แอดมินเองนะคะ กลุ่ม 300 คนขึ้นไปลดเหลือ 480 บาท/คนค่ะ แอดมินแก้ในใบเสนอราคาให้แล้วนะคะ', tag: 'admin ตอบเอง' }], { handoff: false, disc: true, nHuman: Math.max(0, S.b.nHuman - 1) });
+
+// ---------- customer view ----------
+function custCalc() {
+  const c = S.c, T = CTYPES.find(t => t.id === c.type), D = DATES.find(d => d.id === c.date);
+  const guests = (parseInt(c.f.p1, 10) || 0) + (parseInt(c.f.p2, 10) || 0);
+  const sel = UNITS.filter(u => c.sel.includes(u.id));
+  const cap = sel.reduce((a, u) => a + u.cap, 0);
+  const nights = D.nights.length;
+  const cot = sel.filter(u => !u.group);
+  const cotCost = cot.reduce((a, u) => a + (u.price || 0), 0) * nights;
+  const unknown = cot.filter(u => !u.price).length;
+  const lines = [];
+  if (T.group) {
+    lines.push({ label: 'แพ็กเกจ' + T.name, sub: guests + ' คน × 500 บาท · ที่พักกลุ่ม อาหาร 7 มื้อ กิจกรรมมาตรฐาน', amt: guests * 500 });
+    if (cot.length) lines.push({ label: 'ส่วนต่างบ้านพัก (ครู / ผู้ดูแล)', sub: cot.map(u => u.name).join(', ') + ' × ' + nights + ' คืน' + (unknown ? ' · ' + unknown + ' หลังรอแอดมินแจ้งราคา' : ''), amt: cotCost });
+  } else lines.push({ label: 'ค่าบ้านพัก', sub: (cot.map(u => u.name).join(', ') || '-') + ' × ' + nights + ' คืน' + (unknown ? ' · ' + unknown + ' หลังรอแอดมินแจ้งราคา' : ''), amt: cotCost });
+  const total = lines.reduce((a, l) => a + l.amt, 0);
+  return { T, D, guests, sel, cap, nights, lines, total, enough: guests > 0 && cap >= guests };
+}
+function viewCustomer() {
+  const c = S.c, k = custCalc(), { T, D } = k;
+  const labels = ['ประเภท', 'รายละเอียด', 'เลือกที่พัก', 'ตรวจสอบ', 'คุยกับแอดมิน & ชำระ'];
+  const steps = labels.map((l, i) => `<div class="step ${c.step === i + 1 ? 'on' : c.step > i + 1 ? 'done' : ''}"><span class="sn">${i + 1}</span>${l}</div>`).join('');
+  const field = (id, label, key, err, type) => `<div class="field"><label class="lbl2" for="${id}">${label}</label><input id="${id}" class="${err ? 'inp-err' : 'inp'}" ${type ? 'type="' + type + '"' : ''} data-field="${key}" value="${esc(c.f[key])}"></div>`;
+  const unitBtn = (u) => { const taken = unitTaken(u.id, D.nights), on = c.sel.includes(u.id);
+    const price = u.group ? 'ในแพ็กเกจ' : (u.price ? baht(u.price) + '/คืน' : 'ราคาสอบถาม');
+    return `<button class="house ${taken ? 'off' : on ? 'on' : ''}" ${taken ? 'disabled' : act('cUnit', u.id)} aria-pressed="${on}"><span style="font-weight:700;font-size:15px">${u.name}</span><span style="font-size:13px">${u.group ? 'ประมาณ ' + u.cap + ' คน*' : u.cap + ' คน'} · ${price}</span><span style="font-size:12px;margin-top:auto">${taken ? 'ไม่ว่างในวันที่เลือก' : on ? 'เลือกแล้ว' : 'ว่าง'}</span></button>`; };
+  let main = '';
+  if (c.step === 1) main = `<section class="card" style="padding:26px;display:flex;flex-direction:column;gap:18px"><div><h1 class="serif" style="margin:0;font-size:26px">ต้องการเข้าพักแบบไหน</h1><p class="muted" style="margin:6px 0 0">เลือกประเภทก่อน แบบฟอร์มและที่พักที่แสดงจะเปลี่ยนตามประเภท</p></div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px">${CTYPES.map(t => `<button class="type ${c.type === t.id ? 'on' : ''}" ${act('cType', t.id)}><span class="serif" style="font-size:19px;font-weight:700">${t.name}</span><span class="muted" style="font-size:14px;line-height:1.55">${t.desc}</span><span style="font-size:13px;font-weight:600;color:#9A7A2E;margin-top:auto">${t.price}</span></button>`).join('')}</div></section>`;
+  if (c.step === 2) main = `<section class="card" style="padding:26px;display:flex;flex-direction:column;gap:20px"><div><div class="eyebrow">${T.name}</div><h1 class="serif" style="margin:4px 0 0;font-size:26px">กรอกรายละเอียดการเข้าพัก</h1></div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">${field('org', T.org, 'org')}${field('nm', 'ชื่อผู้ติดต่อ *', 'name', c.err2 && !c.f.name.trim())}${field('ph', 'เบอร์โทร *', 'phone', c.err2 && !c.f.phone.trim())}${field('ln', 'LINE ID', 'line')}</div>
+    <div class="field"><div class="lbl2">วันที่เข้าพัก *</div><div style="display:flex;gap:8px;flex-wrap:wrap">${DATES.map(d => `<button class="${c.date === d.id ? 'chip-on' : 'chip'}" ${act('cDate', d.id)}>${d.label}</button>`).join('')}</div></div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr))">${field('p1', T.p1, 'p1', false, 'number')}${field('p2', T.p2, 'p2', false, 'number')}${field('ar', 'เวลามาถึงโดยประมาณ', 'arrive')}</div>
+    ${field('al', 'อาหารที่แพ้ / มังสวิรัติ / ข้อมูลสุขภาพ', 'allergy')}
+    <div class="field"><div class="lbl2">กิจกรรมที่อยากทำ</div><div style="display:flex;gap:8px;flex-wrap:wrap">${ACTS.map(n => `<button class="${c.acts.includes(n) ? 'chip-on' : 'chip'}" ${act('cAct', n)}>${n}</button>`).join('')}</div></div>
+    <div class="field"><div class="lbl2">รู้จักเราจากช่องทางไหน</div><div style="display:flex;gap:8px;flex-wrap:wrap">${CHANS.map(n => `<button class="${c.chan === n ? 'chip-on' : 'chip'}" ${act('cChan', n)}>${n}</button>`).join('')}</div></div>
+    ${c.err2 ? '<div role="alert" style="color:#912018;font-weight:600;font-size:14px">กรุณากรอกชื่อผู้ติดต่อและเบอร์โทร</div>' : ''}
+    <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn-sec" ${act('cBack')}>ย้อนกลับ</button><button class="btn" ${act('cNext2')}>ต่อไป: เลือกที่พัก</button></div></section>`;
+  if (c.step === 3) { const pct = k.guests ? Math.min(100, Math.round(k.cap * 100 / k.guests)) : 0;
+    main = `<section class="card" style="padding:26px;display:flex;flex-direction:column;gap:18px"><div><div class="eyebrow">${D.label} · ${k.nights} คืน</div><h1 class="serif" style="margin:4px 0 0;font-size:26px">เลือกที่พัก</h1><p class="muted" style="margin:6px 0 0;font-size:14px">ที่ขึ้นสีเทาคือมีคนจองแล้วในวันที่เลือก · ข้อมูลบ้านพักจาก kaengkrachan.net</p></div>
+    <div style="background:#FBF9F4;border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:8px"><div style="display:flex;justify-content:space-between;font-size:14px;gap:8px;flex-wrap:wrap"><span>รองรับได้ <strong>${k.cap}</strong> จาก <strong>${k.guests}</strong> คน</span><span>${k.enough ? 'ที่พักพอแล้ว' : 'ยังขาด ' + Math.max(0, k.guests - k.cap) + ' คน'}</span></div><div class="bar"><div class="fill" style="width:${pct}%;background:${k.enough ? '#1E4D3A' : '#D97706'}"></div></div></div>
+    ${T.group ? `<div class="serif" style="font-size:18px;font-weight:600">อาคารพักกลุ่ม <span class="muted" style="font-size:13px;font-weight:400">รวมในแพ็กเกจค่าย · *ความจุเป็นตัวเลขสมมติ รอรีสอร์ตยืนยัน</span></div><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px">${UNITS.filter(u => u.group).map(unitBtn).join('')}</div>` : ''}
+    <div class="serif" style="font-size:18px;font-weight:600">บ้านพัก <span class="muted" style="font-size:13px;font-weight:400">${T.group ? 'สำหรับครู / ผู้ดูแล คิดส่วนต่างตามราคาเว็บไซต์' : 'ราคาและความจุจากเว็บไซต์ KRSC'}</span></div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px">${UNITS.filter(u => !u.group).map(unitBtn).join('')}</div>
+    ${c.err3 ? '<div role="alert" style="color:#912018;font-weight:600;font-size:14px">ที่พักที่เลือกยังรองรับไม่พอ กรุณาเลือกเพิ่ม</div>' : ''}
+    <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn-sec" ${act('cBack')}>ย้อนกลับ</button><button class="btn" ${act('cNext3')}>ต่อไป: ตรวจสอบและส่ง</button></div></section>`; }
+  if (c.step === 4) main = `<section class="card" style="padding:26px;display:flex;flex-direction:column;gap:16px"><h1 class="serif" style="margin:0;font-size:26px">ตรวจสอบก่อนส่งให้แอดมิน</h1>
+    <table style="font-size:15px"><tbody>${k.lines.map(l => `<tr style="border-top:1px solid #EEE8DB"><td style="padding:12px 0">${esc(l.label)}<div class="muted" style="font-size:12px">${esc(l.sub)}</div></td><td style="padding:12px 0;text-align:right;white-space:nowrap">${baht(l.amt)}</td></tr>`).join('')}
+    <tr style="border-top:1.5px solid #16241D"><td style="padding:14px 0" class="serif"><strong>รวมโดยประมาณ</strong></td><td style="text-align:right" class="serif"><strong style="font-size:22px">${baht(k.total)}</strong></td></tr><tr><td class="muted">มัดจำ 50% (ชำระหลังแอดมินยืนยัน)</td><td class="muted" style="text-align:right">${baht(k.total / 2)}</td></tr></tbody></table>
+    <div class="muted" style="font-size:13px;background:#FBF9F4;border-radius:12px;padding:12px 14px;line-height:1.6">ราคาค่ายใช้ตัวอย่าง 500 บาทต่อคน ราคาบ้านพักตามเว็บไซต์ต่อคืน บ้านที่เว็บไม่แสดงราคาให้แอดมินยืนยัน · แอดมินจะตรวจและคอนเฟิร์มราคาจริงในแชต</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn-sec" ${act('cBack')}>ย้อนกลับ</button><button class="btn" ${act('cSend')}>ส่งให้แอดมินตรวจ</button></div></section>`;
+  if (c.step === 5) { const q = c.q; const chat = [{ who: 'sys', text: 'ส่งข้อมูลการจองแล้ว · รหัส KR-2611-021 · ที่พักที่เลือกถูกจองไว้ชั่วคราว (สถานะ: รอยืนยัน) คนอื่นจองซ้ำไม่ได้' }, { who: 'admin', text: 'สวัสดีค่ะ ' + c.f.name + ' แอดมินได้รับข้อมูลแล้วนะคะ\nเช็กแล้ว ' + D.label + ' ที่พักที่เลือกว่างทั้งหมด กำลังทำใบเสนอราคาให้ค่ะ' }];
+    if (q >= 1) chat.push({ who: 'admin', text: 'ใบเสนอราคา\n' + k.lines.map(l => l.label + ': ' + baht(l.amt)).join('\n') + '\nรวม ' + baht(k.total) + '\nมัดจำ 50% = ' + baht(k.total / 2) + ' ส่วนที่เหลือชำระวันเช็กเอาต์ค่ะ\n\n(Premium: AI ร่างจากข้อมูลในฟอร์ม · admin ตรวจแล้ว)' });
+    if (q >= 2) chat.push({ who: 'me', text: 'ยืนยันราคาค่ะ' }, { who: 'admin', text: 'ขอบคุณค่ะ รบกวนชำระมัดจำ ' + baht(k.total / 2) + ' ภายใน 3 วัน\nหากเลยกำหนด การจองชั่วคราวจะหมดอายุและที่พักจะกลับมาว่างนะคะ' });
+    if (q >= 3) chat.push({ who: 'me', text: 'โอนมัดจำแล้วค่ะ [แนบสลิป]' }, { who: 'admin', text: 'ได้รับมัดจำแล้วค่ะ การจองยืนยันเรียบร้อย\nระบบจะส่งข้อความยืนยันยอดคนให้ 7 วันก่อนเข้าพักนะคะ' });
+    const status = ['รอแอดมินยืนยันราคา · จองที่พักไว้ชั่วคราว', 'ได้รับใบเสนอราคา · รอลูกค้ายอมรับ', 'รอชำระมัดจำ (ภายใน 3 วัน)', 'ยืนยันแล้ว · จ่ายมัดจำแล้ว'][q];
+    const lock = '<span style="font-size:14px;font-weight:600;padding:10px 16px;border-radius:999px;border:1px dashed #C9C2B2;color:#8A877E">🔒 ชำระมัดจำ · เปิดหลังแอดมินยืนยันราคาและลูกค้ายอมรับ</span>';
+    const foot = q === 0 ? `<button class="btn" ${act('cQ', '1')}>(จำลอง) แอดมินส่งใบเสนอราคา</button> ${lock}`
+      : q === 1 ? `<button class="btn" ${act('cQ', '2')}>ยอมรับราคา</button> ${lock}`
+      : q === 2 ? `<button class="btn" ${act('cQ', '3')}>แนบสลิปมัดจำ ${baht(k.total / 2)}</button>`
+      : `<span style="color:#1E4D3A;font-weight:600;font-size:14px">ในระบบจริง การจองนี้จะขึ้นในหลังบ้านทันที (ปฏิทิน · ข้อมูลลูกค้า)</span> <button class="btn-link" ${act('view', 'admin')}>ไปดูหลังบ้าน</button>`;
+    main = `<section class="card" style="overflow:hidden"><div style="background:#14322A;color:#FFF;padding:14px 20px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center"><div><div style="font-weight:700">คุยกับแอดมิน KRSC</div><div style="font-size:12px;color:#B9C4B9">ผ่าน LINE @krscthailand · รหัสการจอง KR-2611-021</div></div><span class="pill p-wait">${status}</span></div>
+    <div class="chat" style="padding:18px;background:#F7F5EF;min-height:300px">${chat.map(m => `<div class="r ${m.who}"><div class="m ${m.who}">${esc(m.text)}</div></div>`).join('')}</div>
+    <div style="padding:14px 18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;border-top:1px solid #EEE8DB">${foot}</div></section>`; }
+  const aside = `<aside class="card" style="flex:1 1 280px;padding:20px;display:flex;flex-direction:column;gap:10px"><div class="serif" style="font-size:17px;font-weight:700">สรุปการจอง</div><div style="font-size:14px;line-height:1.75">
+    <div><span class="muted">ประเภท:</span> ${T.name}</div><div><span class="muted">ผู้จอง:</span> ${esc(c.f.org ? c.f.org + ' · ' + c.f.name : c.f.name)}</div><div><span class="muted">วันที่:</span> ${D.label} (${k.nights} คืน)</div><div><span class="muted">จำนวน:</span> ${k.guests} คน</div><div><span class="muted">ที่พัก:</span> ${k.sel.length ? k.sel.map(u => u.name).join(', ') : 'ยังไม่ได้เลือก'}</div><div><span class="muted">กิจกรรม:</span> ${c.acts.join(', ') || '-'}</div></div></aside>`;
+  return `<header style="background:#FFF;border-bottom:1px solid #E8E1D1;padding:14px 32px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between"><div style="display:flex;gap:12px;align-items:center">${LOGO('#14322A')}<div><div class="serif" style="font-size:18px;font-weight:700">Kaeng Krachan Riverside Resort &amp; Camping</div><div class="muted" style="font-size:12px">จองที่พักและค่ายออนไลน์ · ต้นแบบ (prototype)</div></div></div><button class="btn-sec" ${act('cRestart')}>เริ่มใหม่</button></header>
+  <div style="max-width:1180px;margin:0 auto;padding:22px 32px 40px;display:flex;flex-direction:column;gap:20px"><nav style="display:flex;flex-wrap:wrap;gap:10px 22px">${steps}</nav><div style="display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start"><main style="flex:999 1 600px;min-width:0;display:flex;flex-direction:column;gap:16px">${main}</main>${aside}</div></div>`;
+}
+const LOGO = (bg) => `<svg width="38" height="38" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19" fill="${bg}" stroke="#B8913A" stroke-width="1.5"/><path d="M8 28 L16 15 L21 22 L25 17 L32 28 Z" fill="#D9B860"/><path d="M8 31 Q20 27 32 31" stroke="#9FC6B0" stroke-width="1.5" fill="none"/></svg>`;
+
+// ---------- admin view ----------
+function dayInfo(d) {
+  const list = BK.filter(b => here(b, d));
+  const acts = []; list.forEach(b => b.acts.filter(a => a[0] === d).forEach(a => acts.push({ t: a[1], name: a[2], who: b.name })));
+  acts.sort((x, y) => x.t.localeCompare(y.t));
+  const tc = {}; list.forEach(b => { tc[b.type] = (tc[b.type] || 0) + 1; });
+  return { list, acts, tc, people: list.reduce((a, b) => a + pax(b), 0), arr: list.filter(b => b.from === d).length, dep: list.filter(b => b.to === d).length, cf: conflictOn(d) };
+}
+const stOf = (b, d) => b.from === d ? 'เข้าพักวันนี้' : b.to === d ? 'ออกวันนี้' : 'พักต่อ';
+const typeP = (t) => `<span class="${TYPE[t][1]}">${TYPE[t][0]}</span>`;
+function viewAdmin() {
+  const a = S.a;
+  const tabs = [['today', 'วันนี้'], ['cal', 'ปฏิทิน'], ['book', 'การจองทั้งหมด'], ['cust', 'ข้อมูลลูกค้า'], ['house', 'บ้านพัก']];
+  const titles = { today: 'ภาพรวมวันนี้', cal: 'ปฏิทินการเข้าพัก', book: 'การจองทั้งหมด', cust: 'ข้อมูลลูกค้า', house: 'บ้านพักและอาคาร' };
+  let body = '';
+  if (a.tab === 'today') { const t = dayInfo(TODAY);
+    body = `<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px">
+      <div class="card kpi"><div class="muted" style="font-size:13px">ลูกค้าในรีสอร์ตวันนี้</div><div class="kpi-n">${t.people}</div><div class="muted" style="font-size:12px">คน</div></div>
+      <div class="card kpi"><div class="muted" style="font-size:13px">จำนวนกลุ่ม</div><div class="kpi-n">${t.list.length}</div><div style="display:flex;gap:4px;flex-wrap:wrap">${Object.keys(t.tc).map(k => `<span class="${TYPE[k][1]}">${TYPE[k][0]} ${t.tc[k]}</span>`).join('')}</div></div>
+      <div class="card kpi"><div class="muted" style="font-size:13px">เข้าพักวันนี้ / ออกวันนี้</div><div class="kpi-n">${t.arr} / ${t.dep}</div><div class="muted" style="font-size:12px">กลุ่ม</div></div>
+      <div class="card kpi" style="background:#FFF6F5;border-color:#F6C9C3"><div style="font-size:13px;color:#912018">ต้องจัดการ</div><div class="kpi-n" style="color:#B42318">3</div><div style="font-size:12px;color:#912018">ดูรายการด้านขวา</div></div></div>
+      <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start"><div class="card" style="flex:999 1 480px;min-width:0;padding:20px;display:flex;flex-direction:column;gap:12px"><div class="serif" style="font-size:18px;font-weight:700">กลุ่มที่อยู่ในรีสอร์ตวันนี้</div>
+      ${t.list.map(b => `<div style="border-top:1px solid #F1ECE1;padding-top:12px;display:flex;flex-direction:column;gap:6px"><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between"><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><strong style="font-size:16px">${b.name}</strong>${typeP(b.type)}<span class="pill p-none">${stOf(b, TODAY)}</span></div><button class="btn-link" ${act('aCust', b.id)}>ดูข้อมูลลูกค้า</button></div><div class="muted" style="font-size:14px">${pax(b)} คน · ${b.houses.map(([u, n]) => U(u) + ' (' + n + ')').join(', ')}</div><div style="font-size:14px">กิจกรรมวันนี้: ${b.acts.filter(x => x[0] === TODAY).map(x => x[1] + ' ' + x[2]).join(' · ') || 'ไม่มี'}</div></div>`).join('')}</div>
+      <div class="card" style="flex:1 1 300px;padding:20px;display:flex;flex-direction:column;gap:10px"><div class="serif" style="font-size:18px;font-weight:700">ต้องจัดการ</div>
+      <div class="alert-r"><strong style="color:#912018">รอ CEO อนุมัติ:</strong> บริษัท H ขอเหมาทั้งรีสอร์ต 5–6 ธ.ค. ถ้าอนุมัติ ระบบจะปิดรับจองวันนั้นให้อัตโนมัติ</div>
+      <div class="alert-y"><strong style="color:#7A5A12">ปิดยอด D-2 วันนี้:</strong> บริษัท C (มา 21 พ.ย.) ยังไม่ตอบ จะใช้ยอดเดิม 22 คน</div>
+      <div class="alert-y"><strong style="color:#7A5A12">รอมัดจำ:</strong> ค่ายเยาวชน E (มา 23 พ.ย.) ครบกำหนดพรุ่งนี้</div></div></div>`; }
+  if (a.tab === 'cal') { const t = dayInfo(a.day);
+    let cells = WD.map(w => `<div class="muted" style="font-size:12px;font-weight:600;text-align:center;padding:4px 0">${w}</div>`).join('');
+    for (let d = 1; d <= 35; d++) {
+      if (d > 30) { cells += '<div></div>'; continue; }
+      const list = BK.filter(b => here(b, d)); const ppl = BK.filter(b => night(b, d)).reduce((s, b) => s + pax(b), 0); const cf = conflictOn(d).length;
+      cells += `<button class="cal ${cf ? 'x' : a.day === d ? 'sel' : ''}" ${act('aDay', d)} aria-label="${d} พฤศจิกายน"><span style="display:flex;justify-content:space-between;width:100%"><strong style="font-size:14px">${d}${d === TODAY ? ' · วันนี้' : ''}</strong><span class="muted" style="font-size:11px">${ppl ? ppl + ' คน' : ''}</span></span>${list.map(b => `<span class="${TYPE[b.type][2]}"></span>`).join('')}</button>`;
+    }
+    body = `<div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start"><div class="card" style="flex:999 1 560px;min-width:0;padding:18px;display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px"><div class="serif" style="font-size:20px;font-weight:700">พฤศจิกายน 2569</div><div style="display:flex;gap:8px;flex-wrap:wrap;font-size:12px">${Object.keys(TYPE).map(typeP).join('')}<span style="color:#912018;font-weight:600">ไม่มีบ้านชน: ระบบกันไว้ตั้งแต่ฟอร์มจอง</span></div></div>
+      <div style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px">${cells}</div></div>
+      <div class="card" style="flex:1 1 320px;min-width:0;padding:20px;display:flex;flex-direction:column;gap:14px"><div><div class="eyebrow">รายละเอียดวัน</div><div class="serif" style="font-size:22px;font-weight:700;margin-top:2px">${WD[(a.day - 1) % 7]} ${a.day} พฤศจิกายน 2569</div></div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center">${[[t.people, 'คนในรีสอร์ต'], [t.list.length, 'กลุ่ม'], [t.arr + ' / ' + t.dep, 'เข้า / ออก']].map(([n, l]) => `<div style="background:#FBF9F4;border-radius:12px;padding:10px"><div class="serif" style="font-size:22px;font-weight:700">${n}</div><div class="muted" style="font-size:12px">${l}</div></div>`).join('')}</div>
+      ${t.cf.length ? `<div class="alert-r" style="font-size:13px;color:#912018;font-weight:600">บ้านชนคืนนี้ · ${t.cf.join(' · ')}</div>` : ''}
+      ${t.list.length ? '' : '<div class="muted" style="font-size:14px">ไม่มีลูกค้าในวันนี้</div>'}
+      ${t.list.map(b => `<div style="border-top:1px solid #F1ECE1;padding-top:10px;display:flex;flex-direction:column;gap:6px"><div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><strong>${b.name}</strong>${typeP(b.type)}<span class="pill p-none">${stOf(b, a.day)}</span></div>${b.houses.map(([u, n]) => `<div style="display:flex;justify-content:space-between;font-size:13px"><span>${U(u)}</span><span class="muted">${n} คน</span></div>`).join('')}<button class="btn-link" style="align-self:flex-start" ${act('aCust', b.id)}>ดูข้อมูลลูกค้า</button></div>`).join('')}
+      <div style="border-top:1px solid #EEE8DB;padding-top:12px;display:flex;flex-direction:column;gap:6px"><div class="serif" style="font-size:16px;font-weight:700">กิจกรรมวันนี้</div>${t.acts.length ? t.acts.map(x => `<div style="display:grid;grid-template-columns:52px minmax(0,1fr);gap:8px;font-size:13px"><strong>${x.t}</strong><span>${x.name} <span class="muted">· ${x.who}</span></span></div>`).join('') : '<div class="muted" style="font-size:13px">ไม่มีกิจกรรม</div>'}</div></div></div>`; }
+  if (a.tab === 'book') { const cfIds = [];
+    const st = (arr) => ['D-7', 'D-5', 'D-3', 'D-2'].map((l, i) => `<span class="dot ${arr[i] === 2 ? 'd-done' : arr[i] === 1 ? 'd-now' : 'd-todo'}">${l}</span>`).join('');
+    body = `<div class="card" style="overflow-x:auto"><table style="min-width:900px"><thead><tr><th class="th">ลูกค้า</th><th class="th">ประเภท</th><th class="th">เข้า – ออก</th><th class="th">คน</th><th class="th">มัดจำ</th><th class="th">ยืนยันยอด D-7 → D-2</th><th class="th">บ้าน</th><th class="th"></th></tr></thead><tbody>
+      ${BK.map(b => `<tr><td class="td"><div style="font-weight:600">${b.name}</div><div class="muted" style="font-size:12px">${b.id} · ${b.channel}</div></td><td class="td">${typeP(b.type)}</td><td class="td">${dName(b.from)} – ${dName(b.to)}</td><td class="td">${pax(b)}</td><td class="td"><span class="${b.payCls}">${b.pay}</span></td><td class="td"><div style="display:flex;gap:3px;flex-wrap:wrap">${st(b.steps)}</div><div class="muted" style="font-size:12px;margin-top:4px">${b.recNote}</div></td><td class="td"><span class="pill ${cfIds.includes(b.id) ? 'p-warn' : 'p-ok'}">${cfIds.includes(b.id) ? 'ชน 1 จุด' : 'ไม่ชน'}</span></td><td class="td"><button class="btn-link" ${act('aCust', b.id)}>ดูข้อมูล</button></td></tr>`).join('')}</tbody></table></div>`; }
+  if (a.tab === 'cust') { const q = a.q.trim(); const b = BK.find(x => x.id === a.cust);
+    const list = BK.filter(x => !q || x.name.includes(q) || x.phone.includes(q) || x.line.includes(q));
+    let days = ''; for (let d = b.from; d <= b.to; d++) days += `<div style="border:1px solid #EEE8DB;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:4px"><strong style="font-size:14px">วันที่ ${d - b.from + 1} · ${dName(d)}</strong>${b.acts.filter(x => x[0] === d).map(x => `<div style="font-size:13px"><span style="font-weight:600">${x[1]}</span> ${x[2]}</div>`).join('')}</div>`;
+    body = `<div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start"><div class="card" style="flex:1 1 260px;padding:16px;display:flex;flex-direction:column;gap:8px"><label for="q" class="lbl2">ค้นหาชื่อ เบอร์ หรือ LINE</label><input id="q" class="inp" data-afield="q" value="${esc(a.q)}" placeholder="เช่น โรงเรียน">
+      ${list.map(x => `<button class="cust ${a.cust === x.id ? 'on' : ''}" ${act('aCust', x.id)}><strong style="font-size:14px">${x.name}</strong><span class="muted" style="font-size:12px">${TYPE[x.type][0]} · ${dName(x.from)} · ${x.hist.length ? 'ลูกค้าเก่า' : 'ลูกค้าใหม่'}</span></button>`).join('') || '<div class="muted" style="font-size:13px">ไม่พบลูกค้า</div>'}</div>
+      <article class="card" style="flex:999 1 560px;min-width:0;padding:24px;display:flex;flex-direction:column;gap:18px">
+      <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:flex-start"><div><div style="display:flex;gap:8px;flex-wrap:wrap">${typeP(b.type)}<span class="pill ${b.hist.length ? 'p-ok' : 'p-none'}">${b.hist.length ? 'ลูกค้าเก่า · มาแล้ว ' + b.hist.length + ' ครั้ง' : 'ลูกค้าใหม่'}</span></div><div class="serif" style="font-size:26px;font-weight:700;margin-top:6px">${b.name}</div><div class="muted" style="font-size:13px">${b.id} · ติดต่อมาทาง ${b.channel}</div></div><span class="${b.payCls}">${b.pay}</span></div>
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;background:#FBF9F4;border-radius:14px;padding:14px">
+        <div><div class="muted" style="font-size:12px">เช็กอิน</div><strong>${dName(b.from)} · ${b.arrive}</strong></div><div><div class="muted" style="font-size:12px">เช็กเอาต์</div><strong>${dName(b.to)}</strong></div><div><div class="muted" style="font-size:12px">จำนวนคืน</div><strong>${b.to - b.from} คืน</strong></div><div><div class="muted" style="font-size:12px">จำนวนคน</div><strong>${pax(b)} (${b.p1l} ${b.p1}${b.p2 ? ' · ' + b.p2l + ' ' + b.p2 : ''})</strong></div></div>
+      <div style="display:flex;flex-wrap:wrap;gap:20px"><div style="flex:1 1 260px;display:flex;flex-direction:column;gap:8px"><div class="serif" style="font-size:17px;font-weight:700">ผู้ติดต่อ</div><div class="kv"><span class="muted">ชื่อ</span><span>${b.contact}</span><span class="muted">โทร</span><span>${b.phone}</span><span class="muted">LINE</span><span>${b.line}</span><span class="muted">มาถึงประมาณ</span><span>${b.arrive}</span></div></div>
+      <div style="flex:1 1 260px;display:flex;flex-direction:column;gap:8px"><div class="serif" style="font-size:17px;font-weight:700">บ้านพัก</div>${b.houses.map(([u, n]) => `<div style="display:flex;justify-content:space-between;font-size:14px;border-bottom:1px dashed #EEE8DB;padding-bottom:4px"><span>${U(u)}</span><span class="muted">${n} คน</span></div>`).join('')}</div></div>
+      <div style="display:flex;flex-direction:column;gap:8px"><div class="serif" style="font-size:17px;font-weight:700">ตารางกิจกรรม</div><div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px">${days}</div></div>
+      <div style="display:flex;flex-wrap:wrap;gap:20px"><div style="flex:1 1 260px;display:flex;flex-direction:column;gap:6px"><div class="serif" style="font-size:17px;font-weight:700">รายละเอียดอื่น</div><div style="font-size:14px;line-height:1.6"><strong style="color:#912018">${b.allergy || 'ไม่มีอาหารที่แพ้'}</strong><br>${b.note}</div><div class="muted" style="font-size:13px">ใบสั่งงานฉบับที่ ${b.ver} · ทีมตอบ OK ${b.ok}/4 ทีม</div></div>
+      <div style="flex:1 1 260px;display:flex;flex-direction:column;gap:6px"><div class="serif" style="font-size:17px;font-weight:700">เคยมาพักที่รีสอร์ตไหม</div>${b.hist.length ? b.hist.map(([w, d, n]) => `<div style="font-size:13px;line-height:1.55;border-left:3px solid #D9B860;padding-left:10px"><strong>${w}</strong> · ${d}<div style="color:#7A5A12">จำไว้: ${n}</div></div>`).join('') : '<div class="muted" style="font-size:14px">ลูกค้าใหม่ ยังไม่เคยมาพัก</div>'}</div></div></article></div>`; }
+  if (a.tab === 'house') body = `<p class="muted" style="margin:0;font-size:14px">บ้านพักดึงข้อมูลจากเว็บไซต์ kaengkrachan.net/en/rooms (ความจุและราคาต่อคืน) · อาคารพักกลุ่มมาจากใบสั่งงาน ความจุเป็นตัวเลขสมมติ รอรีสอร์ตยืนยัน</p>
+    <div class="card" style="overflow-x:auto"><table style="min-width:760px"><thead><tr><th class="th">รหัส / ชื่อ</th><th class="th">ประเภท</th><th class="th">ความจุ</th><th class="th">ราคา/คืน</th><th class="th">คืนนี้ (19 พ.ย.)</th><th class="th">ที่มาข้อมูล</th></tr></thead><tbody>
+    ${UNITS.map(u => { const users = BK.filter(x => night(x, TODAY) && x.houses.some(([id]) => id === u.id)).map(x => x.name);
+      return `<tr><td class="td" style="font-weight:600">${u.name}</td><td class="td">${u.kind}</td><td class="td">${u.cap} คน</td><td class="td">${u.price ? u.price.toLocaleString('en-US') + ' บาท' : (u.group ? 'ในแพ็กเกจ' : 'สอบถาม')}</td><td class="td"><span class="pill ${users.length ? 'p-none' : 'p-ok'}">${users.length ? users.join(', ') : 'ว่าง'}</span></td><td class="td muted" style="font-size:12px">${u.src}</td></tr>`; }).join('')}</tbody></table></div>`;
+  return `<div class="app"><aside class="side"><div style="display:flex;gap:12px;align-items:center">${LOGO('none')}<div><div class="serif" style="font-size:18px;font-weight:700;color:#FFF">KRSC</div><div style="font-size:12px;color:#B9C4B9">Booking Hub · หลังบ้าน</div></div></div>
+    <nav style="display:flex;flex-direction:column;gap:4px">${tabs.map(([id, l]) => `<button class="nav ${a.tab === id ? 'on' : ''}" ${act('aTab', id)}>${l}</button>`).join('')}</nav>
+    <div style="margin-top:auto;border-top:1px solid rgba(255,255,255,.12);padding-top:16px;font-size:12px;color:#B9C4B9;line-height:1.6">ระดับ Standard · ต้นแบบ<br>ข้อมูลลูกค้าเป็นตัวอย่างสมมติ<br>ข้อมูลบ้านพักจาก kaengkrachan.net</div></aside>
+    <div class="content"><div style="display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between"><div><div class="eyebrow">Kaeng Krachan Riverside Resort &amp; Camping</div><h1 class="serif" style="margin:4px 0 0;font-size:28px">${titles[a.tab]}</h1></div><div class="muted" style="font-size:14px">วันนี้: พฤ. 19 พ.ย. 2569 · Admin</div></div>${body}</div></div>`;
+}
+
+// ---------- chatbot view ----------
+function viewBot() {
+  const b = S.b, per = b.disc ? 480 : 500, total = 300 * per + 16000;
+  const startQ = [['price', 'สอบถามราคาค่ายลูกเสือ'], ['avail', 'บ้านว่าง 27–29 พ.ย. ไหม'], ['faq', 'การเดินทาง / ต้องเตรียมอะไร'], ['disc', 'ขอส่วนลดพิเศษ'], ['rem', 'ดูข้อความเตือน D-7']];
+  const quick = b.step === 'askPrice' ? [['give', '300 คน · 3 วัน 2 คืน · 27–29 พ.ย.']] : b.step === 'form' ? [['form', '(จำลอง) ครูกรอกฟอร์มจองเสร็จแล้ว']] : b.step === 'pay' ? [['pay', 'ส่งสลิปมัดจำ']] : b.step === 'wait' ? [] : b.step === 'reminder' ? [['same', 'ยอดเท่าเดิม 300 คน'], ['change', 'เปลี่ยนเป็น 285 คน']] : startQ;
+  const FLOW = [['1. ถามในแชต', 'AI ตอบ บอกราคาประมาณ ส่งลิงก์ฟอร์ม'], ['2. กรอกฟอร์มจอง', 'หน้าจองของลูกค้า ขั้น 1–4'], ['3. ใบเสนอราคา', 'AI ร่างจากฟอร์ม → admin อนุมัติ'], ['4. มัดจำ', 'ส่งสลิปในแชต → admin ยืนยัน'], ['5. ก่อนเข้าพัก', 'เตือน D-7 → D-2 · AI อ่านคำตอบ']];
+  const flow = `<section style="display:flex;flex-direction:column;gap:8px"><div style="font-size:13px;font-weight:700;color:#3B4A42">แชตนี้เชื่อมกับหน้าจองของลูกค้าอย่างไร (ขั้นที่กำลังเกิดขึ้นเป็นสีเข้ม)</div><div style="display:flex;flex-wrap:wrap;gap:8px">${FLOW.map(([t, sub], i) => `<div class="fl ${b.stage === i + 1 ? 'on' : b.stage > i + 1 ? 'done' : ''}"><div style="font-size:14px;font-weight:700">${t}</div><div style="font-size:12px;line-height:1.5;margin-top:2px">${sub}</div></div>`).join('')}</div></section>`;
+  const msgs = b.msgs.map(m => `<div class="r ${m.who}"><div class="m ${m.who}">${esc(m.text)}${m.tag ? `<div class="tag">${esc(m.tag)}</div>` : ''}</div></div>`).reverse().join('');
+  return `<header style="background:#14322A;color:#FFF;padding:16px 32px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between"><div style="display:flex;gap:12px;align-items:center">${LOGO('none')}<div><div class="serif" style="font-size:20px;font-weight:700">KRSC Booking Hub <span style="color:#D9B860">Premium</span></div><div style="font-size:13px;color:#B9C4B9">AI chatbot ใน LINE OA · ข้อมูลและราคาเป็นตัวอย่าง</div></div></div><button class="tn" ${act('bReset')}>เริ่มแชตใหม่</button></header>
+  <main style="max-width:1220px;margin:0 auto;padding:24px 32px 40px;display:flex;flex-direction:column;gap:22px">
+  <section class="card" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));overflow:hidden"><div style="padding:18px 22px;border-right:1px solid #EEE8DB"><div style="font-size:12px;font-weight:700;color:#3B4A42;margin-bottom:6px">STANDARD · ไม่มี AI</div><div class="muted" style="font-size:15px;line-height:1.65">LINE OA ส่งข้อความตามเวลาที่ตั้งไว้ เช่น เตือน D-7 ถ้าลูกค้าถามราคา บ้านว่าง หรือการเดินทาง admin ต้องอ่านและพิมพ์ตอบเองทุกข้อความ นอกเวลางานต้องรอถึงเช้า</div></div><div style="padding:18px 22px;background:linear-gradient(135deg,#FBF4E2,#F2F7F3)"><div style="font-size:12px;font-weight:700;color:#7A5A12;margin-bottom:6px">PREMIUM · เพิ่ม AI</div><div style="font-size:15px;line-height:1.65">AI ตอบคำถามที่รีสอร์ตเขียนคำตอบไว้แล้ว และเช็กบ้านว่างจาก Booking Hub ได้ 24 ชม. ร่างใบเสนอราคาให้ แต่ admin ต้องกดอนุมัติก่อนส่ง เรื่องที่ AI ตอบไม่ได้จะส่งต่อให้คน</div></div></section>
+  ${flow}
+  <section style="display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start">
+    <div style="flex:0 1 390px;min-width:290px;margin:0 auto;background:#0F1A16;border-radius:40px;padding:12px;box-shadow:0 24px 48px rgba(20,50,42,.25)"><div style="background:#C9D9E8;border-radius:30px;overflow:hidden;display:flex;flex-direction:column;height:720px">
+      <div style="background:#FFF;padding:14px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #E6EBF0">${LOGO('#14322A')}<div><div style="font-size:15px;font-weight:600">Kaeng Krachan Riverside</div><div class="muted" style="font-size:12px">LINE Official Account · คุยกับครูโรงเรียน A</div></div></div>
+      <div class="chat" style="flex:1;overflow-y:auto;flex-direction:column-reverse;padding:14px">${msgs}</div>
+      <div style="background:#FFF;padding:12px;display:flex;flex-direction:column;gap:8px;border-top:1px solid #E6EBF0"><div class="muted" style="font-size:12px">แตะเพื่อถาม (จำลองข้อความที่ครูพิมพ์)</div><div style="display:flex;flex-wrap:wrap;gap:6px">${quick.map(([k, l]) => `<button class="qr" ${act('bQ', k)}>${l}</button>`).join('')}</div></div></div></div>
+    <div style="flex:1 1 480px;min-width:0;display:flex;flex-direction:column;gap:16px"><div><div class="eyebrow">หลังบ้าน · Booking Hub</div><h1 class="serif" style="margin:4px 0 0;font-size:28px">งานที่รอ admin</h1></div>
+      ${!b.pending && !b.handoff ? '<div class="card muted" style="padding:20px;font-size:15px;border-style:dashed">ยังไม่มีงานรอ admin · ลองแตะ "สอบถามราคาค่ายลูกเสือ" หรือ "ขอส่วนลดพิเศษ" ในแชต</div>' : ''}
+      ${b.pending ? `<article class="card" style="padding:22px;display:flex;flex-direction:column;gap:14px;border:1.5px solid #D9B860"><div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:baseline"><div class="serif" style="font-size:19px;font-weight:700">ใบเสนอราคาที่ AI ร่าง</div><span class="pill p-wait">รอ admin อนุมัติ · ยังไม่ส่งถึงลูกค้า</span></div><div class="muted" style="font-size:14px">จากฟอร์มจอง KR-2611-021 · โรงเรียน A · ค่ายลูกเสือ 3 วัน 2 คืน · 27–29 พ.ย. · นักเรียน 280 ครู 20</div>
+        <table style="font-size:15px"><tbody><tr><td style="padding:10px 0">แพ็กเกจค่ายลูกเสือ 3 วัน 2 คืน<div class="muted" style="font-size:12px">ที่พัก อาหาร 7 มื้อ กิจกรรมมาตรฐาน</div></td><td style="text-align:right">300 × ${per} = ${baht(300 * per)}</td></tr><tr><td style="padding:10px 0">ส่วนต่างบ้านพักครู<div class="muted" style="font-size:12px">A2, A3, B2, B3, A4, A5 ที่ครูเลือกในฟอร์ม · 8,000 บาท/คืน × 2 คืน</div></td><td style="text-align:right">16,000 บาท</td></tr><tr><td style="padding:12px 0" class="serif"><strong>รวม</strong></td><td style="text-align:right" class="serif"><strong style="font-size:20px">${baht(total)}</strong></td></tr><tr><td class="muted">มัดจำ 50%</td><td class="muted" style="text-align:right">${baht(total / 2)}</td></tr></tbody></table>
+        <div style="background:#FBF9F4;border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.65"><strong>AI ร่างจากอะไร:</strong> ข้อมูลในฟอร์มจอง (จำนวนคน วันที่ บ้านที่เลือก) + ตารางราคาของรีสอร์ต (แพ็กเกจ 500 บาท/คน ราคาบ้านจากเว็บไซต์) · เช็กบ้านชนแล้ว ไม่มี<br><strong>ส่วนลด:</strong> ${b.disc ? 'admin ลดเหลือ 480 บาท/คน (กลุ่ม 300 คนขึ้นไป)' : 'ราคาปกติ AI ไม่ใส่ส่วนลดเอง'}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px"><button class="btn" ${act('bApprove')}>อนุมัติและส่งให้ลูกค้า</button><button class="btn-sec" ${act('bDisc')}>${b.disc ? 'ใช้ราคาปกติ 500/คน' : 'แก้ราคา: ลดเหลือ 480/คน'}</button></div></article>` : ''}
+      ${b.handoff ? `<article class="card" style="padding:22px;display:flex;flex-direction:column;gap:10px;border:1.5px solid #E89A90"><div class="serif" style="font-size:19px;font-weight:700;color:#912018">ส่งต่อให้คนตอบ</div><div style="font-size:14px;line-height:1.65">ครูโรงเรียน A ขอส่วนลดพิเศษ · AI ไม่มีสิทธิ์ให้ส่วนลด จึงส่งเรื่องให้ admin / CEO<br><span class="muted">ประวัติลูกค้า: ลูกค้าใหม่ · การจองปัจจุบัน: กำลังขอใบเสนอราคา</span></div><div><button class="btn-sec" ${act('bTake')}>admin รับเรื่องและตอบเอง</button></div></article>` : ''}
+      <div class="card" style="padding:20px 22px;display:flex;flex-direction:column;gap:8px"><div class="serif" style="font-size:17px;font-weight:600">กติกาของ AI (รีสอร์ตตั้งเอง)</div><ul style="margin:0;padding-left:20px;font-size:14px;line-height:1.8"><li>ตอบได้เฉพาะคำถามที่มีคำตอบอยู่ในคลัง FAQ ของรีสอร์ต และข้อมูลบ้านว่างจาก Booking Hub</li><li>ร่างราคาได้ แต่ส่งให้ลูกค้าได้หลัง admin กดอนุมัติเท่านั้น</li><li>ไม่ยืนยันการจอง ไม่ให้ส่วนลด ไม่รับเงินเอง เรื่องเหล่านี้ส่งต่อให้คน</li><li>ขอความยินยอม (PDPA) ก่อนเก็บชื่อและเบอร์ลงประวัติลูกค้า</li></ul></div>
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px"><div class="card" style="padding:18px"><div class="muted" style="font-size:13px">AI ตอบเองในแชตนี้</div><div class="kpi-n" style="margin-top:6px">${b.nAi}</div></div><div class="card" style="padding:18px"><div class="muted" style="font-size:13px">ส่งต่อ / รอ admin</div><div class="kpi-n" style="margin-top:6px;color:#9A7A2E">${b.nHuman}</div></div></div>
+    </div></section></main>`;
+}
+
+
+// ---------- staff view ----------
+const SUN = { dp12: 'ดอกปีบ บน 1–2', dp14: 'ดอกปีบ ล่าง 1–4', dp5: 'ดอกปีบ ล่าง 5', yt1: 'ยูงทอง 101–103', yt2: 'ยูงทอง 201–202', sh: 'Shelter 1–3', peach: 'บ้านพีช', A1: 'A1 บาหลี', A2: 'A2 ลดาวัลย์', A3: 'A3 เฟื่องฟ้า', A4: 'A4 กระดุมทอง 1', A5: 'A5 กระดุมทอง 2', B1: 'B1 ลีลาวดี', B2: 'B2 มะลิ 1', B3: 'B3 มะลิ 2', C1: 'C1 ในฝัน', C2: 'C2 ศรีตรัง', D1a: 'D1 เบิร์ด 1', D1b: 'D1 เบิร์ด 2' };
+const SBK = [
+  { name: 'โรงเรียน B', group: true, from: 19, to: 21, pax: 298, old: 320, arrive: '10:00', houses: ['dp12', 'dp14', 'dp5', 'yt1', 'A1', 'A2', 'A3', 'B1', 'B2', 'B3'], allergy: 'แพ้กุ้ง 3 · มังสวิรัติ 12', note: '',
+    acts: [[19, '10:00', 'ลงทะเบียน ปฐมนิเทศ'], [19, '13:00', 'Adventure Park'], [19, '19:00', 'กองไฟ'], [20, '09:00', 'ล่องแก่ง'], [20, '14:00', 'ยิงธนู'], [20, '16:00', 'ส่องนก (Bird Watching)'], [21, '09:00', 'พิธีปิดค่าย']] },
+  { name: 'ครอบครัว F', group: false, from: 19, to: 20, pax: 2, arrive: '15:00', houses: ['A4'], allergy: '', note: 'ฉลองครบรอบแต่งงาน ขอจัดโต๊ะริมน้ำ', acts: [[19, '16:00', 'กาแฟ Camper ริมน้ำ'], [20, '08:00', 'ล่องแก่ง']] },
+  { name: 'ครอบครัว D', group: false, from: 20, to: 22, pax: 4, arrive: '14:00', houses: ['A5'], allergy: 'เด็กแพ้ถั่ว 1', note: 'เตียงเสริมเด็ก 1 เตียง', acts: [[20, '15:00', 'ล่องแก่ง'], [21, '09:00', 'ให้อาหารสัตว์'], [21, '14:00', 'Workshop สบู่ออแกนิค']] },
+  { name: 'บริษัท C', group: true, from: 21, to: 23, pax: 22, arrive: '11:00', houses: ['C1', 'C2', 'D1a', 'D1b'], allergy: 'มังสวิรัติ 2', note: '', acts: [[21, '13:00', 'ทีมบิลดิ้ง'], [21, '18:00', 'พิซซ่าโฮมเมด'], [22, '09:00', 'ล่องแก่ง'], [22, '14:00', 'ยิงธนู']] },
+  { name: 'ค่ายเยาวชน E', group: true, from: 23, to: 26, pax: 150, arrive: '09:30', houses: ['sh', 'yt2'], allergy: 'แพ้นมวัว 2', note: '', acts: [[23, '13:00', 'Adventure Park']] },
+];
+const AGE = { 'ยิงธนู': 'อายุ 10 ปีขึ้นไป', 'Workshop สบู่ออแกนิค': 'อายุ 10 ปีขึ้นไป' };
+const MEALS = [['เช้า', '07:00'], ['กลางวัน', '12:00'], ['เย็น', '18:00']];
+const eats = (b, d, i) => {
+  if (d < b.from || d > b.to) return false;
+  if (d === b.from) return i >= 1;
+  if (d === b.to) return i === 0 || (i === 1 && b.group);
+  return true;
+};
+const dl = (d) => WD[(d - 1) % 7] + ' ' + d + ' พ.ย.';
+
+function staffBuild(team, d) {
+    const out = [];
+    const here = SBK.filter(b => b.from <= d && d <= b.to);
+    if (team === 'kitchen') {
+      MEALS.forEach(([m, t], i) => {
+        const g = here.filter(b => eats(b, d, i)); if (!g.length) return;
+        const n = g.reduce((a, b) => a + b.pax, 0);
+        const al = g.filter(b => b.allergy).map(b => b.name + ': ' + b.allergy).join(' · ');
+        const upd = g.find(b => b.old) ? 'ยอดใหม่ ' + g.find(b => b.old).name + ' ' + g.find(b => b.old).pax + ' (เดิม ' + g.find(b => b.old).old + ')' : '';
+        out.push({ key: 'k' + d + i, time: t, title: 'มื้อ' + m + ' · ' + n + ' ที่', lines: g.map(b => b.name + ' ' + b.pax + ' คน'), warn: al, upd });
+      });
+      const tm = SBK.filter(b => [0, 1, 2].some(i => eats(b, d + 1, i)));
+      const n2 = tm.reduce((a, b) => a + b.pax, 0);
+      if (n2) out.push({ key: 'kb' + d, time: '15:00', title: 'ซื้อของสำหรับพรุ่งนี้', lines: ['รวมประมาณ ' + n2 + ' คน (ยอดยืนยันแล้วที่ D-2)'].concat(tm.map(b => b.name + ' ' + b.pax)), warn: '', upd: '' });
+    }
+    if (team === 'house') {
+      here.filter(b => b.from === d).forEach(b => out.push({ key: 'hi' + d + b.name, time: 'ก่อน ' + b.arrive, title: 'เตรียมรับ ' + b.name, lines: [b.houses.map(h => SUN[h]).join(', ')], warn: b.note, upd: '' }));
+      here.filter(b => b.to === d).forEach(b => out.push({ key: 'ho' + d + b.name, time: 'หลัง 11:00', title: 'ทำความสะอาดหลังเช็กเอาต์ · ' + b.name, lines: [b.houses.map(h => SUN[h]).join(', ')], warn: '', upd: '' }));
+    }
+    if (team === 'trainer' || team === 'venue') {
+      const acts = [];
+      here.forEach(b => b.acts.filter(a => a[0] === d).forEach(a => acts.push({ b, t: a[1], name: a[2] })));
+      acts.sort((x, y) => x.t.localeCompare(y.t));
+      if (team === 'venue') here.filter(b => b.from === d && b.group).forEach(b => out.push({ key: 'vb' + d + b.name, time: b.arrive, title: 'รถมาถึง · ' + b.name, lines: [b.pax + ' คน · จุดรับรถที่ลานจอด'], warn: '', upd: b.old ? 'ยอดใหม่ ' + b.pax + ' (เดิม ' + b.old + ')' : '' }));
+      acts.forEach(x => {
+        if (team === 'trainer') out.push({ key: 'ta' + d + x.t + x.name, time: x.t, title: x.name, lines: [x.b.name + ' · ' + x.b.pax + ' คน'], warn: AGE[x.name] || '', upd: x.b.old ? 'ยอดใหม่ ' + x.b.pax + ' (เดิม ' + x.b.old + ')' : '' });
+        else out.push({ key: 'va' + d + x.t + x.name, time: x.t, title: 'จัดเตรียมจุด ' + x.name, lines: [x.b.name + ' · ' + x.b.pax + ' คน'], warn: '', upd: '' });
+      });
+      out.sort((x, y) => x.time.localeCompare(y.time));
+    }
+    return out;
+  }
+
+const STEAMS = [['kitchen', 'ครัว'], ['house', 'แม่บ้าน'], ['trainer', 'วิทยากร'], ['venue', 'สถานที่']];
+A.sTeam = (t) => { S.s.team = t; };
+A.sDay = (d) => { S.s.day = +d; };
+A.sDone = (k) => { S.s.done[k] = !S.s.done[k]; };
+function viewStaff() {
+  const st = S.s;
+  const cnt = (id) => { const l = staffBuild(id, st.day); return { l, d: l.filter(k => st.done[k.key]).length }; };
+  const list = staffBuild(st.team, st.day);
+  const tasks = list.map(k => { const on = !!st.done[k.key]; return `<div class="task ${on ? 'done' : ''}"><div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline"><strong style="font-size:15px">${esc(k.title)}</strong><span style="font-size:13px;font-weight:700;color:#9A7A2E;white-space:nowrap">${esc(k.time)}</span></div>${k.upd ? `<span class="upd">${esc(k.upd)}</span>` : ''}${k.lines.map(l => `<div class="line">${esc(l)}</div>`).join('')}${k.warn ? `<div class="warn">${esc(k.warn)}</div>` : ''}<button class="ok ${on ? 'done' : ''}" ${act('sDone', k.key)}>${on ? 'รับทราบแล้ว (กดเพื่อยกเลิก)' : 'รับทราบ'}</button></div>`; }).join('');
+  const dlab = (d) => WD[(d - 1) % 7] + ' ' + d + ' พ.ย.';
+  return `<header style="background:#14322A;color:#FFF;padding:16px 32px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between"><div><div class="serif" style="font-size:20px;font-weight:700">KRSC Booking Hub · <span style="color:#D9B860">งานของทีม</span></div><div style="font-size:13px;color:#B9C4B9">สำหรับหัวหน้าแผนก เปิดบนมือถือ · ข้อมูลมาจากการจองชุดเดียวกับหลังบ้าน</div></div><div style="font-size:13px;color:#B9C4B9">ต้นแบบ · ข้อมูลลูกค้าเป็นตัวอย่างสมมติ</div></header>
+  <div style="max-width:1180px;margin:0 auto;padding:24px 32px 40px;display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start">
+  <aside style="flex:1 1 320px;display:flex;flex-direction:column;gap:14px"><div class="card" style="padding:20px;display:flex;flex-direction:column;gap:10px"><div class="serif" style="font-size:18px;font-weight:700">ทีมเห็นอะไร</div><div class="line">แต่ละทีมเห็นเฉพาะงานของตัวเองในวันนั้น ไม่ต้องอ่านใบสั่งงานทั้งใบ กด "รับทราบ" แล้ว admin จะเห็นในหลังบ้านว่าทีมไหนยังไม่รับทราบ (R6)</div><div class="line">ถ้าลูกค้าเปลี่ยนยอดคนตอนยืนยัน D-7 ถึง D-2 ตัวเลขในหน้านี้เปลี่ยนเองและขึ้นป้าย "ยอดใหม่" (R5)</div></div>
+  <div class="card" style="padding:20px;display:flex;flex-direction:column;gap:8px"><div class="serif" style="font-size:18px;font-weight:700">สถานะรับทราบ ${dlab(st.day)}</div>${STEAMS.map(([id, n]) => { const c = cnt(id); return `<div style="display:flex;justify-content:space-between;font-size:14px;padding:6px 0;border-bottom:1px dashed #EEE8DB"><span>${n}</span><span style="font-weight:600">${c.l.length ? (c.d === c.l.length ? 'รับทราบครบ' : 'รับทราบ ' + c.d + '/' + c.l.length) : 'ไม่มีงาน'}</span></div>`; }).join('')}</div></aside>
+  <div style="flex:0 1 430px;min-width:290px;margin:0 auto;background:#0F1A16;border-radius:40px;padding:12px;box-shadow:0 24px 48px rgba(20,50,42,.25)"><div style="background:#F5F1E8;border-radius:30px;overflow:hidden;display:flex;flex-direction:column;height:820px">
+  <div style="background:#FFF;padding:14px 16px;border-bottom:1px solid #E8E1D1;display:flex;flex-direction:column;gap:10px"><div style="display:flex;justify-content:space-between;align-items:baseline"><strong style="font-size:16px">งานวันนี้ของทีม</strong><span class="muted" style="font-size:12px">${STEAMS.find(t => t[0] === st.team)[1]} · ${dlab(st.day)}</span></div>
+  <div style="display:flex;gap:6px">${STEAMS.map(([id, n]) => { const c = cnt(id); return `<button class="team ${st.team === id ? 'on' : ''}" ${act('sTeam', id)}><span>${n}</span><span style="font-size:11px;opacity:.8">${c.d}/${c.l.length}</span></button>`; }).join('')}</div>
+  <div style="display:flex;gap:6px;overflow-x:auto">${[19, 20, 21, 22, 23].map(d => `<button class="${st.day === d ? 'chip-on' : 'chip'}" style="white-space:nowrap" ${act('sDay', d)}>${dlab(d)}${d === 19 ? ' (วันนี้)' : ''}</button>`).join('')}</div></div>
+  <div style="flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px">${tasks || '<div class="muted" style="font-size:14px;text-align:center;padding:30px 0">ไม่มีงานของทีมนี้ในวันนี้</div>'}</div></div></div></div>`;
+}
+
+// ---------- render ----------
+function render() {
+  const views = [['cust', '1. หน้าจองของลูกค้า'], ['admin', '2. หลังบ้าน (Standard)'], ['bot', '3. AI chatbot (Premium)'], ['staff', '4. งานของทีม']];
+  const nav = `<div class="topnav"><span class="lbl">KRSC Booking Hub · ต้นแบบ</span>${views.map(([id, l]) => `<button class="${S.view === id ? 'tn-on' : 'tn'}" ${act('view', id)}>${l}</button>`).join('')}</div>`;
+  document.getElementById('root').innerHTML = nav + (S.view === 'cust' ? viewCustomer() : S.view === 'admin' ? viewAdmin() : S.view === 'staff' ? viewStaff() : viewBot());
+}
+document.addEventListener('click', (e) => {
+  const el = e.target.closest('[data-act]'); if (!el || el.disabled) return;
+  A[el.dataset.act](el.dataset.arg); render();
+});
+document.addEventListener('change', (e) => {
+  const el = e.target;
+  if (el.dataset.field) { S.c.f[el.dataset.field] = el.value; S.c.err2 = false; render(); }
+});
+document.addEventListener('input', (e) => {
+  const el = e.target;
+  if (el.dataset.afield) { S.a.q = el.value; render(); const q = document.getElementById('q'); if (q) { q.focus(); q.setSelectionRange(q.value.length, q.value.length); } }
+});
+render();
+</script>
+</body>
+</html>
