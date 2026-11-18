@@ -221,7 +221,7 @@ The Standard system is built in the low season, March to August 2027, and must b
 - [ ] The admin and every team head use the system for 2 weeks with real bookings
 - [ ] The resort receives the source code, all admin passwords, the domain and hosting in its own name, and a short user and maintenance guide
 
-## Risks and open questions
+## Risks
 
 The biggest risks are people, not technology: staff keeping old habits and the system depending on one person.
 
@@ -238,12 +238,3 @@ The biggest risks are people, not technology: staff keeping old habits and the s
 | The developer stops supporting the system | Low | High | Code, passwords and domain handed over; data can always be exported |
 
 Risks are from report Table 24, adjusted to version 1.
-
-**Open questions for the owner**
-
-- [ ] Package prices to show as the estimate per person for each camp type
-- [ ] Is a 3-day hold before the deposit right for the business?
-- [ ] Which LINE OA plan does the resort use, and does it cover the reconfirmation and team messages?
-- [ ] Which teams get their own LINE group and task page (trainers, venue, housekeeping, kitchen, finance)?
-- [ ] Is keeping customer records for 3 years acceptable?
-- [ ] Who is the back-up admin?
