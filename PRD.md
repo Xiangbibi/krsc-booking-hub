@@ -238,3 +238,14 @@ The biggest risks are people, not technology: staff keeping old habits and the s
 | The developer stops supporting the system | Low | High | Code, passwords and domain handed over; data can always be exported |
 
 Risks are from report Table 24, adjusted to version 1.
+
+## Before the build starts
+
+The freelancer can quote from this PRD and the prototype. To start building, the resort provides these six items once a freelancer is chosen.
+
+1. **House list:** all 24 houses and shelters with their real capacity. The prototype uses sample data from the website.
+2. **Camp programs and prices:** the activities for each camp type and the starting price per person.
+3. **LINE OA access:** admin access to the LINE OA and the name of the current plan.
+4. **Team list:** which teams get a LINE group and a task page.
+5. **Starter Sheet data:** the bookings and customer history to move into the system.
+6. **Owner's decisions:** confirm the 3-day hold and 3-year record keeping, and name the back-up admin.
